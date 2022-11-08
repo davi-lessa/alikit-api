@@ -1,6 +1,6 @@
 import { ModuleBase } from "./module.default.types"
 
-export interface SkuModule extends ModuleBase {
+export interface SkuModuleOptions extends ModuleBase {
     categoryId: number
     forcePromiseWarrantyJson: string
     hasSizeInfo: boolean
@@ -12,7 +12,7 @@ export interface SkuModule extends ModuleBase {
     warrantyDetailJson: string
   }
   
-  export interface I18nMap {
+  interface I18nMap {
     SIZING_INFO: string
     BUST_PROMPT: string
     GLASSES_DIALOG_TITLE: string
@@ -55,7 +55,7 @@ export interface SkuModule extends ModuleBase {
     AXIS: string
   }
   
-  export interface ProductSkupropertyList {
+  interface ProductSkupropertyList {
     isShowTypeColor: boolean
     order: number
     showType: string
@@ -65,7 +65,7 @@ export interface SkuModule extends ModuleBase {
     skuPropertyValues: SkuPropertyValue[]
   }
   
-  export interface SkuPropertyValue {
+  interface SkuPropertyValue {
     propertyValueDefinitionName: string
     propertyValueDisplayName: string
     propertyValueId: number
@@ -76,7 +76,7 @@ export interface SkuModule extends ModuleBase {
     skuPropertyValueTips: string
   }
   
-  export interface SkuPriceList {
+  interface SkuPriceList {
     freightExt: string
     skuAttr: string
     skuId: number
@@ -85,7 +85,7 @@ export interface SkuModule extends ModuleBase {
     skuVal: SkuVal
   }
   
-  export interface SkuVal {
+  interface SkuVal {
     availQuantity: number
     discount: string
     inventory: number
@@ -96,13 +96,13 @@ export interface SkuModule extends ModuleBase {
     skuCalPrice: string
   }
   
-  export interface SkuActivityAmount {
+  interface SkuActivityAmount {
     currency: string
     formatedAmount: string
     value: number
   }
   
-  export interface SkuAmount {
+  interface SkuAmount {
     currency: string
     formatedAmount: string
     value: number

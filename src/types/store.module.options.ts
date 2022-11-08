@@ -1,6 +1,6 @@
 import { ModuleBase } from "./module.default.types";
 
-export interface StoreModule extends ModuleBase {
+export interface StoreModuleOptions extends ModuleBase {
     companyId: number
     countryCompleteName: string
     detailPageUrl: string

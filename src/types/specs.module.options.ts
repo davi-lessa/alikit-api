@@ -5,7 +5,7 @@ interface Prop {
     attrValue: string;
 }
 
-export interface SpecsModule extends ModuleBase{
+export interface SpecsModuleOptions extends ModuleBase{
     props: Prop;
     i18nMap: {}
 }
