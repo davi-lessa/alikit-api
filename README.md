@@ -9,9 +9,9 @@ The idea here is to unite small solutions that can help and speed up small resel
 To build this API, it's firstly necessary to understand the Aliexpress website modus-operandi.
 This can be done, for example, by observing the browser's Dev Tools Network tab's behavior as long as we interact with a product page.
 
-1. On doing this, we can see that some information is brought to the page via server-side rendering, probably in order to improve the product's SEO for search crawlers.
+1. On doing this, we can see that some information is brought to the page via server-side rendering ( probably in order to improve the product's SEO for search crawlers ).
 
-We can notice for example, that in this process the main page sets a global variable called runParams, which is very valuable because it exposes many modules of the application, like priceModule, shippingModule and so on, as well as some data like the current csrf token.
+We can notice, for example, that in this process the main page sets a global variable called runParams, which is very valuable because it exposes many modules of the application, like priceModule, shippingModule and so on, as well as some data like the current csrf token.
 
 2. However, we can also see that other information is loaded asynchronously from Aliexpress, like customer's reviews.
 
@@ -19,4 +19,11 @@ It can happen this way because it's useful to save requests, for example, betwee
 
 So we now have 2 findings, which will guide the next steps of our research.
 
+# The runParams variable and how to handle it
+
+It represents an object that contains various data, such as modules, which in this case are basically organized information that revolves around the product.
+
+To access this variable, we have to interact with the page's scripts, so this can't be done by a standard fetch. This is possible by using JSDOM, a library which has a purpose of simulating somehow a web browser to deal with the raw data extracted, thus providing a DOM. Unlike Cheerio, it also provides the ability to run scripts to access and interact with the page, which is exactly what we need here.
 [...]
+
+that/which, as/like/such as differently/unlike
