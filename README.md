@@ -23,7 +23,5 @@ So we now have 2 findings, which will guide the next steps of our research.
 
 It represents an object that contains various data, such as modules, which in this case are basically organized information that revolves around the product.
 
-To access this variable, we have to interact with the page's scripts, so this can't be done by a standard fetch. This is possible by using JSDOM, a library which has a purpose of simulating somehow a web browser to deal with the raw data extracted, thus providing a DOM. Unlike Cheerio, it also provides the ability to run scripts to access and interact with the page, which is exactly what we need here.
+To access this variable, we have to interact with the page's scripts, so this can't be done by a standard fetch. This is possible by using JSDOM, a library which has a purpose of simulating somehow a web browser to handle the raw data extracted, thus providing a DOM. Unlike Cheerio, it also provides the ability to run scripts to access and interact with the page, which is exactly what we need here.
 [...]
-
-that/which, as/like/such as differently/unlike
