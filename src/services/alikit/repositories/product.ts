@@ -1,7 +1,9 @@
 import { DOMWindow } from "jsdom";
 import { AliKit } from "../core/AliKit";
+import { ProductModule } from "../core/ProductModule";
 import { Repository } from "../core/Repository";
 import { generateProductURLFromId } from "../utils/generate-product-url";
+import { ProductModules } from "./product.modules";
 
 export class Product extends Repository{
     id!: string;
@@ -11,6 +13,8 @@ export class Product extends Repository{
     constructor(main: AliKit){
         super(main);
     }
+
+    public modules: ProductModules = new ProductModules(this);
 
     setId(id: string){
         this.id = id;
