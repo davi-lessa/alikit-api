@@ -6,7 +6,7 @@ import { generateProductURLFromId } from "../utils/generate-product-url";
 export class Product extends Repository{
     id!: string;
     url!: string;
-    dom!: DOMWindow;
+    private dom!: DOMWindow;
 
     constructor(main: AliKit){
         super(main);
@@ -15,20 +15,27 @@ export class Product extends Repository{
     setId(id: string){
         this.id = id;
         this.url = "";
+        return this
     }
 
     setURL(url: string){
         this.id = "";
         this.url = url;
+        return this
+    }
+
+    getCurrentURL(){
+        const url = this.url || generateProductURLFromId(this.id);
+        const bestURL = new URL(url).href;
+        return url
     }
 
     async getData(){
-        const url = this.url ?? generateProductURLFromId(this.id);
+        const url = this.getCurrentURL();
         if(!url) throw "First set the product id or give the product url";
 
-        const bestURL = new URL(url).href;
-        const dom = await this.main.request.domRequest(bestURL);
-        
+        const dom = await this.main.request.domRequest(url);
         this.dom = dom;
+        return dom
     }
 }
