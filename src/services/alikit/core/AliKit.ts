@@ -1,4 +1,4 @@
-import { AliRequest }  from "./Request";
+import { AliRequest }  from "./request";
 import { Product } from "../repositories/product";
 
 export class AliKit{

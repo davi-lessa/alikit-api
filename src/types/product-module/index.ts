@@ -1,6 +1,6 @@
 export * from "./title.module.options";
 export * from "./sku.module.options";
-export * from "./specs.module.options"
+export * from "./specs.module.options";
 export * from "./store.module.options";
 export * from "./description.module.options";
 export * from "./cross-link.module.options";
@@ -11,6 +11,7 @@ export * from "./common.module.options";
 export * from "./action.module.options";
 export * from "./feedback.module.options";
 export * from "./page.module.options";
+export * from "./image.module.options";
 export * from "./installment.module.options";
 export * from "./price.module.options";
 export * from "./quantity.module.options";

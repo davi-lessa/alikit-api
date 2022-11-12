@@ -1,6 +1,6 @@
 import { ModuleBase } from "./module.default.types"
 
-export interface Root extends ModuleBase{
+export interface ActionModuleOptions extends ModuleBase{
     addToCartUrl: string
     aeOrderFrom: string
     allowVisitorAddCart: boolean

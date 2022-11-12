@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, RawAxiosRequestHeaders } from "axios";
 import {JSDOM, BaseOptions, DOMWindow} from "jsdom";
-import { AliKit } from "./AliKit";
+import { AliKit } from "./alikit";
 
 export class AliRequest {
     userAgent: string;

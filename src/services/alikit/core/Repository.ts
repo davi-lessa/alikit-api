@@ -1,4 +1,4 @@
-import { AliKit } from "./AliKit";
+import { AliKit } from "./alikit";
 
 export class Repository{
 
