@@ -5,7 +5,6 @@ export * from "./store.module.options";
 export * from "./description.module.options";
 export * from "./cross-link.module.options";
 export * from "./coupon.module.options";
-export * from "./buyer-protection.module.options";
 export * from "./shipping.module.options";
 export * from "./common.module.options";
 export * from "./action.module.options";

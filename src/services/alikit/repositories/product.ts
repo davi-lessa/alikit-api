@@ -1,67 +1,39 @@
 import { DOMWindow } from "jsdom";
 import { AliKit } from "../core/alikit";
 import { Repository } from "../core/repository";
-import { generateProductURLFromId } from "../utils/generate-product-url";
+import { generateProductURLFromId } from "../utils/generates";
 import * as Modules from "./product-modules/index";
 
-interface allModules {
-  actionModule: Modules.ActionModule;
-  // "commonModule",
-  // "couponModule",
-  // "crossLinkModule",
-  // "descriptionModule",
-  // "feedbackModule",
-  // "groupShareModule",
-  // "imageModule",
-  // "installmentModule",
-  // "middleBannerModule",
-  // "otherServiceModule",
-  // "pageModule",
-  // "preSaleModule",
-  // "priceModule",
-  // "quantityModule",
-  // "recommendModule",
-  // "redirectModule",
-  // "shippingModule",
-  // "skuModule",
-  // "specsModule",
-  // "storeModule",
-  // "titleModule",
+interface modulesTypes {
+  action: Modules.ActionModule;
+  common: Modules.CommonModule;
+  coupon: Modules.CouponModule;
+  crossLink: Modules.CrossLinkModule;
+  description: Modules.DescriptionModule;
+  feedback: Modules.FeedbackModule;
+  image: Modules.ImageModule;
+  installment: Modules.InstallmentModule;
+  page: Modules.PageModule;
+  price: Modules.PriceModule;
+  quantity: Modules.QuantityModule;
+  shipping: Modules.ShippingModule;
+  sku: Modules.SkuModule;
+  specs: Modules.SpecsModule;
+  store: Modules.StoreModule;
+  title: Modules.TitleModule;
 }
-
-type ValueOf<T> = T[keyof T];
-type ValueOfModules = ValueOf<allModules>; // string | number
 
 export class Product extends Repository {
   private _id!: string;
   private _url!: string;
   private _dom!: DOMWindow;
 
-  modules: {
-    action: Modules.ActionModule;
-    buyer_protection: Modules.BuyerProtection;
-    common: Modules.CommonModule;
-    coupon: Modules.CouponModule;
-    crossLink: Modules.CrossLinkModule;
-    description: Modules.DescriptionModule;
-    feedback: Modules.FeedbackModule;
-    image: Modules.ImageModule;
-    installment: Modules.InstallmentModule;
-    page: Modules.PageModule;
-    price: Modules.PriceModule;
-    quantity: Modules.QuantityModule;
-    shipping: Modules.ShippingModule;
-    sku: Modules.SkuModule;
-    specs: Modules.SpecsModule;
-    store: Modules.StoreModule;
-    title: Modules.TitleModule;
-  };
+  modules: modulesTypes;
 
   constructor(main: AliKit) {
     super(main);
     this.modules = {
       action: new Modules.ActionModule(this, "actionModule"),
-      buyer_protection: new Modules.BuyerProtection(this, "buyerProtectionModule"),
       common: new Modules.CommonModule(this, "commonModule"),
       coupon: new Modules.CouponModule(this, "couponModule"),
       crossLink: new Modules.CrossLinkModule(this, "crossLinkModule"),

@@ -1,5 +1,4 @@
 export * from "./action.module";
-export * from "./buyer-protection.module";
 export * from "./common.module";
 export * from "./coupon.module";
 export * from "./cross-link.module";
