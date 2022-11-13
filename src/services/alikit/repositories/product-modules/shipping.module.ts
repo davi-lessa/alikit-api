@@ -7,6 +7,7 @@ export class ShippingModule extends ProductModule {
     super(product, moduleKey);
     this._relevantKeys = ["generalFreightInfo.originalLayoutResultList[0]", "regionCountryName"];
     this._relevantRenamingMap = { originalLayoutResultList: "freightInfo" };
+    this._relevantKeysForRemove = ["additionLayout"];
   }
 
   get data(): ShippingModuleOptions {
