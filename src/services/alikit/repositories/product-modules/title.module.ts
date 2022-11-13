@@ -5,7 +5,7 @@ import { Product } from "../product";
 export class TitleModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {
     super(product, moduleKey);
-    this._relevantKeys = ["feedbackRating", "tradeCount", "subject"];
+    this._summaryKeys = ["feedbackRating", "tradeCount", "subject"];
   }
 
   get data(): TitleModuleOptions {

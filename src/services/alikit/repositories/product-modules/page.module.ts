@@ -5,7 +5,7 @@ import { Product } from "../product";
 export class PageModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {
     super(product, moduleKey);
-    this._relevantKeys = ["description", "imagePath", "keywords", "mSiteUrl", "multiLanguageUrlList", "oldItemDetailUrl"];
+    this._summaryKeys = ["description", "imagePath", "keywords", "mSiteUrl", "multiLanguageUrlList", "oldItemDetailUrl"];
   }
 
   get data(): PageModuleOptions {

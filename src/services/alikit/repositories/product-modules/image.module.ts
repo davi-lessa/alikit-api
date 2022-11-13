@@ -5,7 +5,7 @@ import { Product } from "../product";
 export class ImageModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {
     super(product, moduleKey);
-    this._relevantKeys = ["imagePathList", "summImagePathList", "videoId", "videoUid"];
+    this._summaryKeys = ["imagePathList", "summImagePathList", "videoId", "videoUid"];
   }
 
   get data(): ImageModuleOptions {

@@ -5,7 +5,7 @@ import { Product } from "../product";
 export class SkuModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {
     super(product, moduleKey);
-    this._relevantKeys = ["productSKUPropertyList"];
+    this._summaryKeys = ["productSKUPropertyList"];
   }
 
   get data(): SkuModuleOptions {

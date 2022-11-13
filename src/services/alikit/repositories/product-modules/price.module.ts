@@ -5,7 +5,7 @@ import { Product } from "../product";
 export class PriceModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {
     super(product, moduleKey);
-    this._relevantKeys = [
+    this._summaryKeys = [
       "discount",
       "discountPromotion",
       "formatedPrice",

@@ -5,7 +5,7 @@ import { Product } from "../product";
 export class QuantityModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {
     super(product, moduleKey);
-    this._relevantKeys = ["lot", "totalAvailQuantity", "purchaseLimitNumMax"];
+    this._summaryKeys = ["lot", "totalAvailQuantity", "purchaseLimitNumMax"];
   }
 
   get data(): QuantityModuleOptions {
