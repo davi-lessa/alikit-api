@@ -3,7 +3,7 @@ import { QuantityModuleOptions } from "../../types";
 import { Product } from "../product";
 
 export interface QuantitySummaryOptions {
-  lot: boolean;
+  isLot: boolean;
   totalAvailQuantity: number;
   purchaseLimitNumMax: number;
 }
@@ -13,6 +13,7 @@ export class QuantityModule extends ProductModule {
     super(product, moduleKey);
     this._summaryKeys = ["lot", "totalAvailQuantity", "purchaseLimitNumMax"];
     this._summaryRenamingMap = {
+      lot: "isLot",
       totalAvailQuantity: "stock",
       purchaseLimitNumMax: "purchaseLimit",
     };

@@ -1,9 +1,8 @@
 import { ModuleBase } from "./module.default.types";
 
-export interface ImageModuleOptions {
+export interface ImageModuleOptions extends ModuleBase {
   approved: boolean;
   i18nMap: {};
-  id: number;
   imagePathList: string[];
   name: string;
   summImagePathList: string[];

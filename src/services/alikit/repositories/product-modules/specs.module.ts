@@ -2,7 +2,7 @@ import { ProductModule } from "../../core/product-module";
 import { SpecsModuleOptions } from "../../types";
 import { Product } from "../product";
 
-interface SpecsSummaryOptions extends Omit<SpecsModuleOptions, "id" | "name" | "i18nMap" | "features"> {}
+export interface SpecsSummaryOptions extends Omit<SpecsModuleOptions, "id" | "name" | "i18nMap" | "features"> {}
 
 export class SpecsModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {

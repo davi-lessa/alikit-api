@@ -1,5 +1,6 @@
 import { DOMWindow } from "jsdom";
 import { AliKit } from "../core/alikit";
+import { ProductModule } from "../core/product-module";
 import { Repository } from "../core/repository";
 import { generateProductURLFromId } from "../utils/generates";
 import * as Modules from "./product-modules/index";
@@ -23,6 +24,23 @@ interface modulesTypes {
   title: Modules.TitleModule;
 }
 
+type SummaryUnionOptions = Modules.ActionSummaryOptions &
+  Modules.CommonSummaryOptions &
+  Modules.CouponSummaryOptions &
+  Modules.CrossLinkSummaryOptions &
+  Modules.DescriptionSummaryOptions &
+  Modules.FeedbackSummaryOptions &
+  Modules.ImageSummaryOptions &
+  Modules.InstallmentSummaryOptions &
+  Modules.PageSummaryOptions &
+  Modules.PriceSummaryOptions &
+  Modules.QuantitySummaryOptions &
+  Modules.ShippingSummaryOptions &
+  Modules.SkuSummaryOptions &
+  Modules.SpecsSummaryOptions &
+  Modules.StoreSummaryOptions &
+  Modules.TitleSummaryOptions;
+
 export class Product extends Repository {
   private _id!: string;
   private _url!: string;
@@ -30,8 +48,22 @@ export class Product extends Repository {
 
   modules: modulesTypes;
 
-  constructor(main: AliKit) {
+  constructor(main: AliKit, productIdOrUrl?: string) {
     super(main);
+
+    if (productIdOrUrl) {
+      let trimmedProductIdOrUrl = productIdOrUrl.trim();
+
+      try {
+        let url = new URL(trimmedProductIdOrUrl);
+        this.setByURL(url.href);
+      } catch (er) {
+        const IdRegEx = /[0-9]+/g;
+        const probableId = IdRegEx.exec(trimmedProductIdOrUrl)?.[0];
+        if (probableId) this.setById(probableId);
+      }
+    }
+
     this.modules = {
       action: new Modules.ActionModule(this, "actionModule"),
       common: new Modules.CommonModule(this, "commonModule"),
@@ -78,9 +110,21 @@ export class Product extends Repository {
     return bestURL ? bestURL.href : null;
   }
 
+  public get summary(): SummaryUnionOptions {
+    // Unify all modules summaries into one object
+    let allData: any = {};
+    Object.entries(this.modules).forEach(([k, v]) => {
+      const moduleObject: ProductModule = v;
+      allData = { ...allData, ...moduleObject.summary };
+    });
+    return allData;
+  }
+
+  public getVideoLink() {}
+
   async getData() {
     const url = this.currentURL;
-    if (!url) throw "First set the product id or give the product url";
+    if (!url) throw new Error("First, set the product id or provide the product url");
 
     const domWindow = await this.main.request.domRequest(url);
     this.dom = domWindow;

@@ -1,5 +1,6 @@
 import { ProductModule } from "../../core/product-module";
 import { ImageModuleOptions } from "../../types";
+import { generateProductVideoLink } from "../../utils/generates";
 import { Product } from "../product";
 
 export interface ImageSummaryOptions {

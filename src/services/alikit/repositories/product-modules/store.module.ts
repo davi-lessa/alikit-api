@@ -2,7 +2,7 @@ import { ProductModule } from "../../core/product-module";
 import { StoreModuleOptions } from "../../types";
 import { Product } from "../product";
 
-interface StoreSummaryOptions
+export interface StoreSummaryOptions
   extends Omit<
     StoreModuleOptions,
     | "id"

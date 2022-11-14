@@ -2,7 +2,7 @@ import { ProductModule } from "../../core/product-module";
 import { TitleModuleOptions } from "../../types";
 import { Product } from "../product";
 
-interface TitleSummaryOptions
+export interface TitleSummaryOptions
   extends Omit<
     TitleModuleOptions,
     | "id"

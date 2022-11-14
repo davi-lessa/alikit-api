@@ -42,10 +42,13 @@ export class ProductModule {
   // }
 
   get data() {
-    return this.product.dom.window.runParams.data[this._moduleKey];
+    const moduleObject = this.product.dom.window.runParams.data[this._moduleKey];
+    return moduleObject;
   }
 
   get summary(): any {
+    // Returns a cleaner object, with useful information about the product
+    // Important keys are defined in class extensions, as keys for rename and remove.
     const keyPaths = this._summaryKeys;
 
     const entries = keyPaths.map((path) => {
