@@ -3,7 +3,26 @@ import { CrossLinkOptions } from "../../types";
 import { Product } from "../product";
 
 export interface CrossLinkSummaryOptions {
-  couponList: any[];
+  breadCrumbPathList: BreadCrumbPathList[];
+  crossLinkGroupList: CrossLinkGroupList[];
+}
+
+export interface BreadCrumbPathList {
+  catId: number;
+  name: string;
+  url: string;
+}
+
+export interface CrossLinkGroupList {
+  channel: string;
+  crossLinkList: CrossLinkList[];
+  name: string;
+}
+
+export interface CrossLinkList {
+  displayName: string;
+  name: string;
+  url: string;
 }
 
 export class CrossLinkModule extends ProductModule {
