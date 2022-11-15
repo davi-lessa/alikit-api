@@ -12,7 +12,7 @@ export class CouponModule extends ProductModule {
     this._summaryKeys = ["webCouponInfo.couponList"];
   }
 
-  get data(): CouponModuleOptions | undefined {
+  get data(): CouponModuleOptions {
     return super.data;
   }
 

@@ -42,7 +42,7 @@ export class StoreModule extends ProductModule {
     ];
   }
 
-  get data(): StoreModuleOptions | undefined {
+  get data(): StoreModuleOptions {
     return super.data;
   }
 

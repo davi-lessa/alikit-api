@@ -42,7 +42,7 @@ export class PriceModule extends ProductModule {
     this._summaryKeysForRemove = ["iconAddress", "iconHeight", "iconType", "iconWidth", "elementType", "textColor"];
   }
 
-  get data(): PriceModuleOptions | undefined {
+  get data(): PriceModuleOptions {
     return super.data;
   }
 

@@ -2,7 +2,7 @@ import { DOMWindow } from "jsdom";
 import { AliKit } from "../core/alikit";
 import { ProductModule } from "../core/product-module";
 import { Repository } from "../core/repository";
-import { generateProductURLFromId } from "../utils/generates";
+import { generateProductURLFromId, generateProductVideoLink } from "../utils/generates";
 import * as Modules from "./product-modules/index";
 
 interface modulesTypes {
@@ -125,6 +125,19 @@ export class Product extends Repository {
     return allData;
   }
 
+  public getVideoLink() {
+    // Generates a video link based on product data
+    let { videoUid, videoId } = this.modules.image.data;
+    return generateProductVideoLink(videoUid, videoId);
+  }
+
+  public getFullDescription() {
+    const fullDescriptionUrl = this.modules.description.data.descriptionUrl;
+    if (!fullDescriptionUrl) throw new Error("Unable to get product full description link.");
+
+    //...
+  }
+
   reset() {
     // Use it before a new data extraction;
     this.dom = null;
@@ -141,7 +154,6 @@ export class Product extends Repository {
 
     try {
       const url = this.currentURL;
-      console.log(url);
       if (!url) throw new Error("First, set the product id or provide the product url");
 
       const domWindow = await this.main.request.domRequest(url);

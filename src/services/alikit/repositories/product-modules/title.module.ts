@@ -30,7 +30,7 @@ export class TitleModule extends ProductModule {
     };
   }
 
-  get data(): TitleModuleOptions | undefined {
+  get data(): TitleModuleOptions {
     return super.data;
   }
 

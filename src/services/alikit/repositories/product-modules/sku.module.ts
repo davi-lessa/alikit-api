@@ -13,7 +13,7 @@ export class SkuModule extends ProductModule {
     this._summaryKeys = ["productSKUPropertyList", "skuPriceList"];
   }
 
-  get data(): SkuModuleOptions | undefined {
+  get data(): SkuModuleOptions {
     return super.data;
   }
 

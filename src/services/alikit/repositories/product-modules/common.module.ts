@@ -16,7 +16,7 @@ export class CommonModule extends ProductModule {
     this._summaryKeys = ["categoryId", "currencyCode", "productId", "preSale", "sellerAdminSeq"];
   }
 
-  get data(): CommonModuleOptions | undefined {
+  get data(): CommonModuleOptions {
     return super.data;
   }
 

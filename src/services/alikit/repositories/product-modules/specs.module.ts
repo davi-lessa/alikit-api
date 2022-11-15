@@ -10,7 +10,7 @@ export class SpecsModule extends ProductModule {
     this._summaryKeys = ["props"];
   }
 
-  get data(): SpecsModuleOptions | undefined {
+  get data(): SpecsModuleOptions {
     return super.data;
   }
 

@@ -12,7 +12,7 @@ export class FeedbackModule extends ProductModule {
     this._summaryKeys = ["feedbackServer"];
   }
 
-  get data(): FeedbackModuleOptions | undefined {
+  get data(): FeedbackModuleOptions {
     return super.data;
   }
 

@@ -19,7 +19,7 @@ export class QuantityModule extends ProductModule {
     };
   }
 
-  get data(): QuantityModuleOptions | undefined {
+  get data(): QuantityModuleOptions {
     return super.data;
   }
 

@@ -23,7 +23,7 @@ export class InstallmentModule extends ProductModule {
     this._summaryRenamingMap = { installmentFormList: "installments" };
   }
 
-  get data(): InstallmentModuleOptions | undefined {
+  get data(): InstallmentModuleOptions {
     return super.data;
   }
 

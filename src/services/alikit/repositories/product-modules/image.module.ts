@@ -16,7 +16,7 @@ export class ImageModule extends ProductModule {
     this._summaryKeys = ["imagePathList", "summImagePathList", "videoId", "videoUid"];
   }
 
-  get data(): ImageModuleOptions | undefined {
+  get data(): ImageModuleOptions {
     return super.data;
   }
 

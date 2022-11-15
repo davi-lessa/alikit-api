@@ -30,7 +30,7 @@ export class ShippingModule extends ProductModule {
     ];
   }
 
-  get data(): ShippingModuleOptions | undefined {
+  get data(): ShippingModuleOptions {
     return super.data;
   }
 
