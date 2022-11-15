@@ -17,7 +17,7 @@ export class ActionModule extends ProductModule {
     this._summaryRenamingMap = { localSeller: "isLocalSeller" };
   }
 
-  get data(): ActionModuleOptions {
+  get data(): ActionModuleOptions | undefined {
     return super.data;
   }
 

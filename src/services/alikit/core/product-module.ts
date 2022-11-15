@@ -42,7 +42,7 @@ export class ProductModule {
 
   get data() {
     if (!this.product.dom) throw new Error("First, load a product data.");
-    const moduleObject = this.product.dom.window.runParams.data[this._moduleKey];
+    const moduleObject = this.product.dom.window.runParams.data?.[this._moduleKey];
     return moduleObject;
   }
 

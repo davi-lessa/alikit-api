@@ -33,7 +33,7 @@ export class CrossLinkModule extends ProductModule {
     this._summaryKeysForRemove = ["remark", "target"];
   }
 
-  get data(): CrossLinkOptions {
+  get data(): CrossLinkOptions | undefined {
     return super.data;
   }
 

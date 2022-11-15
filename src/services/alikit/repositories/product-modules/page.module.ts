@@ -22,7 +22,7 @@ export class PageModule extends ProductModule {
     this._summaryKeys = ["description", "imagePath", "keywords", "mSiteUrl", "multiLanguageUrlList", "oldItemDetailUrl"];
   }
 
-  get data(): PageModuleOptions {
+  get data(): PageModuleOptions | undefined {
     return super.data;
   }
 

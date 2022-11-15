@@ -12,7 +12,7 @@ export class DescriptionModule extends ProductModule {
     this._summaryKeys = ["descriptionUrl"];
   }
 
-  get data(): DescriptionModuleOptions {
+  get data(): DescriptionModuleOptions | undefined {
     return super.data;
   }
 

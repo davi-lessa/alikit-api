@@ -96,16 +96,14 @@ export class Product extends Repository {
   }
 
   public setById(id: string) {
-    this._id = id;
-    this._url = "";
     this.reset();
+    this._id = id;
     return this;
   }
 
   public setByURL(url: string) {
-    this._id = "";
-    this._url = url;
     this.reset();
+    this._url = url;
     return this;
   }
 
@@ -143,10 +141,12 @@ export class Product extends Repository {
 
     try {
       const url = this.currentURL;
+      console.log(url);
       if (!url) throw new Error("First, set the product id or provide the product url");
 
       const domWindow = await this.main.request.domRequest(url);
 
+      // Using pageModule to validate the product (Invalid products do not contain this module in runParams)
       if (!domWindow?.runParams?.data?.pageModule) {
         this.reset();
         throw new Error("Unable to get product data");
