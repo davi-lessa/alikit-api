@@ -3,7 +3,7 @@ import { PageModuleOptions } from "../../types";
 import { Product } from "../product";
 
 export interface PageSummaryOptions {
-  description: string;
+  short_description: string;
   imagePath: string;
   keywords: string;
   mSiteUrl: string;
@@ -20,6 +20,9 @@ export class PageModule extends ProductModule {
   constructor(product: Product, moduleKey: string) {
     super(product, moduleKey);
     this._summaryKeys = ["description", "imagePath", "keywords", "mSiteUrl", "multiLanguageUrlList", "oldItemDetailUrl"];
+    this._summaryRenamingMap = {
+      description: "short_description",
+    };
   }
 
   get data(): PageModuleOptions {

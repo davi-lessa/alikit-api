@@ -8,4 +8,9 @@ export class AliKit {
   constructor(productUrlOrId?: string) {
     this.product = new Product(this, productUrlOrId);
   }
+
+  reset() {
+    // Use it before a new data extraction;
+    this.product._reset();
+  }
 }

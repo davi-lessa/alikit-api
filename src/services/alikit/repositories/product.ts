@@ -41,6 +41,11 @@ type SummaryUnionOptions = Modules.ActionSummaryOptions &
   Modules.StoreSummaryOptions &
   Modules.TitleSummaryOptions;
 
+interface FullDescriptionOptions {
+  text: string;
+  imageLinks: string[];
+}
+
 export class Product extends Repository {
   private _id!: string;
   private _url!: string;
@@ -96,13 +101,13 @@ export class Product extends Repository {
   }
 
   public setById(id: string) {
-    this.reset();
+    this._reset();
     this._id = id;
     return this;
   }
 
   public setByURL(url: string) {
-    this.reset();
+    this._reset();
     this._url = url;
     return this;
   }
@@ -131,14 +136,28 @@ export class Product extends Repository {
     return generateProductVideoLink(videoUid, videoId);
   }
 
-  public getFullDescription() {
+  public async getFullDescription(): Promise<FullDescriptionOptions> {
     const fullDescriptionUrl = this.modules.description.data.descriptionUrl;
     if (!fullDescriptionUrl) throw new Error("Unable to get product full description link.");
+    console.log(fullDescriptionUrl);
 
-    //...
+    try {
+      const domWindow = await this.main.request.domRequest(fullDescriptionUrl);
+
+      const text = [...domWindow.document.querySelectorAll("p")]
+        .map((p) => p.textContent?.replace(/\n/g, "")?.trim())
+        .filter((i) => i)
+        .join("\n");
+
+      const imageLinks = [...domWindow.document.querySelectorAll("img")].map((img) => img.src);
+
+      return { imageLinks, text };
+    } catch (error) {
+      throw error;
+    }
   }
 
-  reset() {
+  _reset() {
     // Use it before a new data extraction;
     this.dom = null;
     this._id = "";
@@ -148,7 +167,7 @@ export class Product extends Repository {
   async getData(resetBefore: boolean = false) {
     if ((this._dom || this._fetching) && !resetBefore)
       return console.warn("Data was already been obtained / is already being obtained for this product.");
-    else if (resetBefore) this.reset();
+    else if (resetBefore) this._reset();
 
     this._fetching = true;
 
@@ -160,7 +179,7 @@ export class Product extends Repository {
 
       // Using pageModule to validate the product (Invalid products do not contain this module in runParams)
       if (!domWindow?.runParams?.data?.pageModule) {
-        this.reset();
+        this._reset();
         throw new Error("Unable to get product data");
       }
 
