@@ -2,6 +2,10 @@ import { Product } from "../repositories/product";
 import { deepRenameKeys, deepRemoveByKeys } from "../utils/transforms";
 
 export class ProductModule {
+  // A product module doesn't store any data
+  // It's only a way to get data from product and return it more organized and clean.
+  // That way, it is not necessary to instantiate them again each time the data is reset.
+
   protected product: Product;
   private _moduleKey: string;
   protected _summaryKeys: string[];
@@ -36,12 +40,8 @@ export class ProductModule {
     return validPath;
   }
 
-  // private _tryToRenamePath(path: string) {
-  //   const rennamed = this._summaryRenamingMap[path];
-  //   return rennamed ? rennamed : path;
-  // }
-
   get data() {
+    if (!this.product.dom) throw new Error("First, load a product data.");
     const moduleObject = this.product.dom.window.runParams.data[this._moduleKey];
     return moduleObject;
   }

@@ -44,12 +44,14 @@ type SummaryUnionOptions = Modules.ActionSummaryOptions &
 export class Product extends Repository {
   private _id!: string;
   private _url!: string;
-  private _dom!: DOMWindow;
+  private _dom!: DOMWindow | null;
+  private _fetching: boolean;
 
   modules: modulesTypes;
 
   constructor(main: AliKit, productIdOrUrl?: string) {
     super(main);
+    this._fetching = false;
 
     if (productIdOrUrl) {
       let trimmedProductIdOrUrl = productIdOrUrl.trim();
@@ -84,7 +86,8 @@ export class Product extends Repository {
     };
   }
 
-  public get dom(): DOMWindow {
+  public get dom(): DOMWindow | null {
+    if (!this._dom) throw new Error("First, load a product data");
     return this._dom;
   }
 
@@ -95,12 +98,14 @@ export class Product extends Repository {
   public setById(id: string) {
     this._id = id;
     this._url = "";
+    this.reset();
     return this;
   }
 
   public setByURL(url: string) {
     this._id = "";
     this._url = url;
+    this.reset();
     return this;
   }
 
@@ -113,21 +118,47 @@ export class Product extends Repository {
   public get summary(): SummaryUnionOptions {
     // Unify all modules summaries into one object
     let allData: any = {};
+
     Object.entries(this.modules).forEach(([k, v]) => {
       const moduleObject: ProductModule = v;
       allData = { ...allData, ...moduleObject.summary };
     });
+
     return allData;
   }
 
-  public getVideoLink() {}
+  reset() {
+    // Use it before a new data extraction;
+    this.dom = null;
+    this._id = "";
+    this._url = "";
+  }
 
-  async getData() {
-    const url = this.currentURL;
-    if (!url) throw new Error("First, set the product id or provide the product url");
+  async getData(resetBefore: boolean = false) {
+    if ((this._dom || this._fetching) && !resetBefore)
+      return console.warn("Data was already been obtained / is already being obtained for this product.");
+    else if (resetBefore) this.reset();
 
-    const domWindow = await this.main.request.domRequest(url);
-    this.dom = domWindow;
-    return domWindow;
+    this._fetching = true;
+
+    try {
+      const url = this.currentURL;
+      if (!url) throw new Error("First, set the product id or provide the product url");
+
+      const domWindow = await this.main.request.domRequest(url);
+
+      if (!domWindow?.runParams?.data?.pageModule) {
+        this.reset();
+        throw new Error("Unable to get product data");
+      }
+
+      this.dom = domWindow;
+
+      this._fetching = false;
+      return this.summary;
+    } catch (error) {
+      this._fetching = false;
+      console.error(error);
+    }
   }
 }
