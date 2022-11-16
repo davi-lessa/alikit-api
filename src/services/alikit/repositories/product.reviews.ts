@@ -1,5 +1,6 @@
 import { AliKit } from "../core/alikit";
 import { Product } from "./product";
+import { JSDOM } from "jsdom";
 
 interface QueryOptions {
   ownerMemberId: any;
@@ -97,8 +98,21 @@ export class ProductReviews {
     this._query.companyId = cId;
   }
 
+  getStarsCountByPercentage(percentage: number | string) {
+    let map: any = {
+      "100": 5,
+      "80": 4,
+      "60": 3,
+      "40": 2,
+      "20": 1,
+    };
+    return map[percentage] || null;
+  }
+
   async getReviews() {
-    // Standard can be faster and easier to configure proxy later
+    // Standard method can be faster and easier to configure proxy later
+
+    const feedbackItemClassName = ".feedback-item";
     try {
       console.log(this._nextURL, this.currentPage);
 
@@ -111,7 +125,47 @@ export class ProductReviews {
       });
       let formatted = rawHTML.replace(/\s\s+/g, " ");
       this.currentPage++;
-      return formatted;
+
+      const dom = new JSDOM(formatted, { runScripts: "dangerously" });
+      const reviews = [...dom.window.document.querySelectorAll(feedbackItemClassName)];
+      const reviewsData = reviews.map((reviewContainer) => {
+        const authorName = reviewContainer.querySelector(".user-name a")?.textContent;
+        const authorLink = reviewContainer.querySelector(".user-name a")?.getAttribute("href");
+        const authorCountry = reviewContainer.querySelector(".fb-user-info .user-country")?.textContent?.trim();
+
+        const reviewText = reviewContainer.querySelector(".buyer-feedback span:first-child")?.textContent?.trim();
+        const starsPercent = reviewContainer
+          .querySelector(".star-view span")
+          // @ts-ignore
+          ?.style?.width?.replace(/%/g, "")
+          ?.trim();
+        const starsCount = this.getStarsCountByPercentage(starsPercent);
+        const date = reviewContainer.querySelector(".r-time-new")?.textContent?.trim() || 0;
+        const timestamp = new Date(date).getTime();
+        // @ts-ignore
+        const imageLinks = [...reviewContainer.querySelectorAll(".r-photo-list img")].map((img) => img.src);
+
+        const infoEntries = [...reviewContainer.querySelectorAll(".user-order-info > span")].map((i) => {
+          const title = i.querySelector("strong")?.textContent?.replace(":", "") || "";
+          const text = i?.textContent?.replace(title, "")?.trim();
+          return [title, text];
+        });
+        const info: any = Object.fromEntries(infoEntries);
+
+        // Useful and useless are got asynchronously.
+        return {
+          authorCountry,
+          authorLink: authorLink && "https:" + authorLink,
+          authorName,
+          imageLinks,
+          info,
+          reviewText,
+          starsCount,
+          timestamp: date && timestamp,
+        };
+      });
+
+      return reviewsData;
     } catch (error) {}
   }
 }
