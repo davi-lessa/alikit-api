@@ -1,6 +1,6 @@
-# Building a Javascript-written back-end API for the AliKit project.
+# Building a Typescript-written back-end API for the AliKit project.
 
-This project will mainly use Express to manage and provide endpoints to be used from the AliKit's Front-end project, as well as packages for data extraction.
+This project will use Express to manage and provide endpoints to be used from the AliKit's Front-end project, as well as packages for data extraction.
 The inspiration comes from an experience dealing with e-commerce scenary, in which many tools can be found to be used for supporting tasks (even plugins), but most of them are paid or have only a single specific function.
 The idea here is to unite small solutions that can help and speed up small reseller's work.
 

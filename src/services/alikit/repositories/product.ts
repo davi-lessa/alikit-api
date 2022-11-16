@@ -4,6 +4,7 @@ import { ProductModule } from "../core/product-module";
 import { Repository } from "../core/repository";
 import { generateProductURLFromId, generateProductVideoLink } from "../utils/generates";
 import * as Modules from "./product-modules/index";
+import { ProductReviews } from "./product.reviews";
 
 interface modulesTypes {
   action: Modules.ActionModule;
@@ -52,7 +53,8 @@ export class Product extends Repository {
   private _dom!: DOMWindow | null;
   private _fetching: boolean;
 
-  modules: modulesTypes;
+  public modules: modulesTypes;
+  public reviews: ProductReviews;
 
   constructor(main: AliKit, productIdOrUrl?: string) {
     super(main);
@@ -89,6 +91,15 @@ export class Product extends Repository {
       store: new Modules.StoreModule(this, "storeModule"),
       title: new Modules.TitleModule(this, "titleModule"),
     };
+
+    this.reviews = new ProductReviews(this, this.main);
+  }
+
+  _reset() {
+    // Use it before a new data extraction;
+    this.dom = null;
+    this._id = "";
+    this._url = "";
   }
 
   public get dom(): DOMWindow | null {
@@ -136,34 +147,6 @@ export class Product extends Repository {
     return generateProductVideoLink(videoUid, videoId);
   }
 
-  public async getFullDescription(): Promise<FullDescriptionOptions> {
-    const fullDescriptionUrl = this.modules.description.data.descriptionUrl;
-    if (!fullDescriptionUrl) throw new Error("Unable to get product full description link.");
-    console.log(fullDescriptionUrl);
-
-    try {
-      const domWindow = await this.main.request.domRequest(fullDescriptionUrl);
-
-      const text = [...domWindow.document.querySelectorAll("p")]
-        .map((p) => p.textContent?.replace(/\n/g, "")?.trim())
-        .filter((i) => i)
-        .join("\n");
-
-      const imageLinks = [...domWindow.document.querySelectorAll("img")].map((img) => img.src);
-
-      return { imageLinks, text };
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  _reset() {
-    // Use it before a new data extraction;
-    this.dom = null;
-    this._id = "";
-    this._url = "";
-  }
-
   async getData(resetBefore: boolean = false) {
     if ((this._dom || this._fetching) && !resetBefore)
       return console.warn("Data was already been obtained / is already being obtained for this product.");
@@ -184,12 +167,34 @@ export class Product extends Repository {
       }
 
       this.dom = domWindow;
+      this.reviews.setup();
 
       this._fetching = false;
       return this.summary;
     } catch (error) {
       this._fetching = false;
       console.error(error);
+    }
+  }
+
+  public async getFullDescription(): Promise<FullDescriptionOptions> {
+    const fullDescriptionUrl = this.modules.description.data.descriptionUrl;
+    if (!fullDescriptionUrl) throw new Error("Unable to get product full description link.");
+    console.log(fullDescriptionUrl);
+
+    try {
+      const domWindow = await this.main.request.domRequest(fullDescriptionUrl);
+
+      const text = [...domWindow.document.querySelectorAll("p")]
+        .map((p) => p.textContent?.replace(/\n/g, "")?.trim())
+        .filter((i) => i)
+        .join("\n");
+
+      const imageLinks = [...domWindow.document.querySelectorAll("img")].map((img) => img.src);
+
+      return { imageLinks, text };
+    } catch (error) {
+      throw error;
     }
   }
 }
