@@ -29,12 +29,16 @@ export class ProductReviews {
   private product: Product;
   private _perPage: number;
   private _query: QueryOptions;
+  private _currentExtracted: number;
+  private _gottenReviews: any[];
   main: AliKit;
 
   constructor(product: Product, main: AliKit) {
     this.product = product;
     this._perPage = 10;
+    this._currentExtracted = 0;
     this.main = main;
+    this._gottenReviews = [];
 
     this._query = {
       ownerMemberId: null,
@@ -89,13 +93,15 @@ export class ProductReviews {
 
     if (!pId || !omId) throw new Error("Couldn't get product ID and seller ID");
 
-    Object.entries(options).forEach(([optionKey, optionVal]: [string, any]) => {
-      if (optionVal) this._query[optionKey] = optionVal;
-    });
-
     this._query.productId = pId;
     this._query.ownerMemberId = omId;
     this._query.companyId = cId;
+    this._currentExtracted = 0;
+    this._gottenReviews = [];
+
+    Object.entries(options).forEach(([optionKey, optionVal]: [string, any]) => {
+      if (optionVal) this._query[optionKey] = optionVal;
+    });
   }
 
   getStarsCountByPercentage(percentage: number | string) {
@@ -107,6 +113,47 @@ export class ProductReviews {
       "20": 1,
     };
     return map[percentage] || null;
+  }
+
+  _formatReviewsDomToData(reviews: any) {
+    const reviewsData = reviews.map((reviewContainer: any) => {
+      const authorName = reviewContainer.querySelector(".user-name a")?.textContent;
+      const authorLink = reviewContainer.querySelector(".user-name a")?.getAttribute("href");
+      const authorCountry = reviewContainer.querySelector(".fb-user-info .user-country")?.textContent?.trim();
+
+      const reviewText = reviewContainer.querySelector(".buyer-feedback span:first-child")?.textContent?.trim();
+      const starsPercent = reviewContainer
+        .querySelector(".star-view span")
+        // @ts-ignore
+        ?.style?.width?.replace(/%/g, "")
+        ?.trim();
+      const starsCount = this.getStarsCountByPercentage(starsPercent);
+      const date = reviewContainer.querySelector(".r-time-new")?.textContent?.trim() || 0;
+      const timestamp = new Date(date).getTime();
+      // @ts-ignore
+      const imageLinks = [...reviewContainer.querySelectorAll(".r-photo-list img")].map((img) => img.src);
+
+      const infoEntries = [...reviewContainer.querySelectorAll(".user-order-info > span")].map((i) => {
+        const title = i.querySelector("strong")?.textContent?.replace(":", "") || "";
+        const text = i?.textContent?.replace(title, "")?.trim();
+        return [title, text];
+      });
+      const info: any = Object.fromEntries(infoEntries);
+
+      // Useful and useless are got asynchronously.
+      return {
+        authorCountry,
+        authorLink: authorLink && "https:" + authorLink,
+        authorName,
+        imageLinks,
+        info,
+        reviewText,
+        starsCount,
+        timestamp: date && timestamp,
+      };
+    });
+
+    return reviewsData;
   }
 
   async getReviews() {
@@ -128,49 +175,16 @@ export class ProductReviews {
           cookie,
         },
       });
+
       let formatted = rawHTML.replace(/\s\s+/g, " ");
-      this.currentPage++;
 
       const dom = new JSDOM(formatted, { runScripts: "dangerously" });
       const reviews = [...dom.window.document.querySelectorAll(feedbackItemClassName)];
+      const reviewsData = this._formatReviewsDomToData(reviews);
 
-      const reviewsData = reviews.map((reviewContainer) => {
-        const authorName = reviewContainer.querySelector(".user-name a")?.textContent;
-        const authorLink = reviewContainer.querySelector(".user-name a")?.getAttribute("href");
-        const authorCountry = reviewContainer.querySelector(".fb-user-info .user-country")?.textContent?.trim();
-
-        const reviewText = reviewContainer.querySelector(".buyer-feedback span:first-child")?.textContent?.trim();
-        const starsPercent = reviewContainer
-          .querySelector(".star-view span")
-          // @ts-ignore
-          ?.style?.width?.replace(/%/g, "")
-          ?.trim();
-        const starsCount = this.getStarsCountByPercentage(starsPercent);
-        const date = reviewContainer.querySelector(".r-time-new")?.textContent?.trim() || 0;
-        const timestamp = new Date(date).getTime();
-        // @ts-ignore
-        const imageLinks = [...reviewContainer.querySelectorAll(".r-photo-list img")].map((img) => img.src);
-
-        const infoEntries = [...reviewContainer.querySelectorAll(".user-order-info > span")].map((i) => {
-          const title = i.querySelector("strong")?.textContent?.replace(":", "") || "";
-          const text = i?.textContent?.replace(title, "")?.trim();
-          return [title, text];
-        });
-        const info: any = Object.fromEntries(infoEntries);
-
-        // Useful and useless are got asynchronously.
-        return {
-          authorCountry,
-          authorLink: authorLink && "https:" + authorLink,
-          authorName,
-          imageLinks,
-          info,
-          reviewText,
-          starsCount,
-          timestamp: date && timestamp,
-        };
-      });
-
+      this.currentPage++;
+      this._currentExtracted += reviewsData.length;
+      this._gottenReviews = [...this._gottenReviews, ...reviewsData];
       return reviewsData;
     } catch (error) {}
   }
