@@ -56,6 +56,8 @@ export class Product extends Repository {
   public modules: modulesTypes;
   public reviews: ProductReviews;
 
+  csrf_token: string | undefined;
+
   constructor(main: AliKit, productIdOrUrl?: string) {
     super(main);
     this._fetching = false;
@@ -167,6 +169,7 @@ export class Product extends Repository {
       }
 
       this.dom = domWindow;
+      this.csrf_token = domWindow?.runParams?.csrfToken;
       this.reviews.setup();
 
       this._fetching = false;

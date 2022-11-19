@@ -110,24 +110,30 @@ export class ProductReviews {
   }
 
   async getReviews() {
-    // Standard method can be faster and easier to configure proxy later
-
+    // Standard method can be faster and easier to configure a proxy later
     const feedbackItemClassName = ".feedback-item";
+
     try {
       console.log(this._nextURL, this.currentPage);
 
       const translation_lang = "pt_BR";
       // We have to set this cookie in request to get the reviews translated
-      const cookie = `intl_locale=${translation_lang}`;
+      const cookie = `intl_locale=${translation_lang};acs_usuc_t=x_csrf=${this.product.csrf_token}&acs_rt=`;
 
       const rawHTML = await this.main.request.standardRequest(this._nextURL, "GET", {
-        headers: { "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7", cookie },
+        headers: {
+          "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          cookie,
+        },
       });
       let formatted = rawHTML.replace(/\s\s+/g, " ");
       this.currentPage++;
 
       const dom = new JSDOM(formatted, { runScripts: "dangerously" });
       const reviews = [...dom.window.document.querySelectorAll(feedbackItemClassName)];
+
       const reviewsData = reviews.map((reviewContainer) => {
         const authorName = reviewContainer.querySelector(".user-name a")?.textContent;
         const authorLink = reviewContainer.querySelector(".user-name a")?.getAttribute("href");
