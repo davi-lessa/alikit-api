@@ -170,7 +170,7 @@ export class Product extends Repository {
 
       this.dom = domWindow;
       this.csrf_token = domWindow?.runParams?.csrfToken;
-      this.reviews.setup();
+      this.reviews.setup(this.main.settings.reviewsSettings);
 
       this._fetching = false;
       return this.summary;
