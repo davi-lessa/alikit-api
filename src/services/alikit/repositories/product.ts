@@ -150,9 +150,10 @@ export class Product extends Repository {
   }
 
   async getData(resetBefore: boolean = false) {
-    if ((this._dom || this._fetching) && !resetBefore)
-      return console.warn("Data was already been obtained / is already being obtained for this product.");
-    else if (resetBefore) this._reset();
+    if ((this._dom || this._fetching) && !resetBefore) {
+      console.warn("Data was already been obtained / is already being obtained for this product.");
+      return null;
+    } else if (resetBefore) this._reset();
 
     this._fetching = true;
 

@@ -6,6 +6,7 @@ export class AliRequest {
   userAgent: string;
 
   constructor(private main: AliKit) {
+    this.main = main;
     this.userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36";
   }
 
@@ -24,7 +25,7 @@ export class AliRequest {
   public async domRequest(url: string, additional_options: BaseOptions = {}): Promise<DOMWindow> {
     // Requests with JSDOM, returning window object to access to the gotten page
 
-    const options: BaseOptions = { runScripts: "dangerously", ...additional_options, userAgent: this.userAgent };
+    const options: BaseOptions = { runScripts: "dangerously", userAgent: this.userAgent, ...additional_options };
 
     const dom: JSDOM = await JSDOM.fromURL(url, options);
     return dom.window;
